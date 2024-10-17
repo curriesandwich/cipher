@@ -1,41 +1,31 @@
-function generateKey(plaintext) {
-    const key = [];
-    for (let i = 0; i < plaintext.length; i += 3) {
-        const group = plaintext.slice(i, i + 7);
-        const groupKey = [];
-        for (let char of group) {
-            const rotation = Math.floor(Math.random() * (500 - 100 + 1)) + 100;
-            groupKey.push(rotation);
-        }
-        key.push(groupKey);
+function generateKey(length = 16) {
+    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    let key = '';
+    for (let i = 0; i < length; i++) {
+        const randomIndex = Math.floor(Math.random() * characters.length);
+        key += characters[randomIndex];
     }
     return key;
 }
 
 function encode(plaintext, key) {
     let encodedText = '';
-    for (let i = 0; i < key.length; i++) {
-        const groupKey = key[i];
-        const group = plaintext.slice(i * 7, (i + 1) * 7);
-        for (let j = 0; j < group.length; j++) {
-            const char = group[j];
-            const encodedChar = String.fromCharCode(char.charCodeAt(0) + groupKey[j]);
-            encodedText += encodedChar;
-        }
+    for (let i = 0; i < plaintext.length; i++) {
+        const char = plaintext[i];
+        const rotation = key.charCodeAt(i % key.length) % 400 + 100; // Use key to derive rotation
+        const encodedChar = String.fromCharCode(char.charCodeAt(0) + rotation);
+        encodedText += encodedChar;
     }
     return encodedText;
 }
 
 function decode(encodedText, key) {
     let decodedText = '';
-    for (let i = 0; i < key.length; i++) {
-        const groupKey = key[i];
-        const group = encodedText.slice(i * groupKey.length, (i + 1) * groupKey.length);
-        for (let j = 0; j < group.length; j++) {
-            const char = group[j];
-            const decodedChar = String.fromCharCode(char.charCodeAt(0) - groupKey[j]);
-            decodedText += decodedChar;
-        }
+    for (let i = 0; i < encodedText.length; i++) {
+        const char = encodedText[i];
+        const rotation = key.charCodeAt(i % key.length) % 400 + 100; // Use key to derive rotation
+        const decodedChar = String.fromCharCode(char.charCodeAt(0) - rotation);
+        decodedText += decodedChar;
     }
     return decodedText;
 }
