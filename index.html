@@ -21,10 +21,12 @@
             <div class="result-box">
                 <h3>Key:</h3>
                 <p id="key"></p>
+                <button id="copy-key">Copy Key</button>
             </div>
             <div class="result-box">
                 <h3>Encoded Text:</h3>
                 <p id="encoded"></p>
+                <button id="copy-encoded">Copy Encoded Text</button>
             </div>
             <div class="result-box">
                 <h3>Decoded Text:</h3>
@@ -121,6 +123,26 @@
             } catch (error) {
                 alert('Invalid key format. Please enter a valid JSON array for the key.');
             }
+        });
+
+        // Copy key to clipboard
+        document.getElementById('copy-key').addEventListener('click', function() {
+            const keyText = document.getElementById('key').innerText;
+            navigator.clipboard.writeText(keyText).then(() => {
+                alert('Key copied to clipboard!');
+            }).catch(err => {
+                console.error('Failed to copy: ', err);
+            });
+        });
+
+        // Copy encoded text to clipboard
+        document.getElementById('copy-encoded').addEventListener('click', function() {
+            const encodedText = document.getElementById('encoded').innerText;
+            navigator.clipboard.writeText(encodedText).then(() => {
+                alert('Encoded text copied to clipboard!');
+            }).catch(err => {
+                console.error('Failed to copy: ', err);
+            });
         });
     </script>
 </body>
