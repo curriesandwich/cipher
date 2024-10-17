@@ -9,6 +9,7 @@
 <body>
     <div class="container">
         <h1>Randomized Cipher Encoder/Decoder</h1>
+        
         <form id="cipher-form">
             <label for="plaintext">Enter Plaintext:</label>
             <textarea id="plaintext" name="plaintext" required></textarea>
@@ -28,6 +29,24 @@
             <div class="result-box">
                 <h3>Decoded Text:</h3>
                 <p id="decoded"></p>
+            </div>
+        </div>
+
+        <hr>
+
+        <form id="decode-form">
+            <label for="ciphertext">Enter Ciphertext:</label>
+            <textarea id="ciphertext" name="ciphertext" required></textarea>
+            <label for="decode-key">Enter Key (JSON Format):</label>
+            <textarea id="decode-key" name="decode-key" required></textarea>
+            <button type="submit">Decode</button>
+        </form>
+
+        <div id="decode-results" class="results">
+            <h2>Decoded Result:</h2>
+            <div class="result-box">
+                <h3>Decoded Text:</h3>
+                <p id="decoded-result"></p>
             </div>
         </div>
     </div>
@@ -86,6 +105,22 @@
             document.getElementById('encoded').innerText = encoded;
             document.getElementById('decoded').innerText = decoded;
             document.getElementById('results').style.display = 'block'; // Show results
+        });
+
+        document.getElementById('decode-form').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const ciphertext = document.getElementById('ciphertext').value;
+            const keyInput = document.getElementById('decode-key').value;
+            let key;
+
+            try {
+                key = JSON.parse(keyInput); // Parse the key from JSON format
+                const decodedText = decode(ciphertext, key);
+                document.getElementById('decoded-result').innerText = decodedText;
+                document.getElementById('decode-results').style.display = 'block'; // Show decode results
+            } catch (error) {
+                alert('Invalid key format. Please enter a valid JSON array for the key.');
+            }
         });
     </script>
 </body>
