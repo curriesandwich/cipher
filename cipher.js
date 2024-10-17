@@ -1,4 +1,4 @@
-function generateKey(length = 16) {
+function generateKey(length = 16) { // Default key length to 16
     const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
     let key = '';
     for (let i = 0; i < length; i++) {
@@ -29,52 +29,3 @@ function decode(encodedText, key) {
     }
     return decodedText;
 }
-
-document.getElementById('cipher-form').addEventListener('submit', function(event) {
-    event.preventDefault();
-    const plaintext = document.getElementById('plaintext').value;
-    const key = generateKey(plaintext);
-    const encoded = encode(plaintext, key);
-    const decoded = decode(encoded, key);
-
-    document.getElementById('key').innerText = JSON.stringify(key);
-    document.getElementById('encoded').innerText = encoded;
-    document.getElementById('decoded').innerText = decoded;
-    document.getElementById('results').style.display = 'block'; // Show results
-});
-
-document.getElementById('decode-form').addEventListener('submit', function(event) {
-    event.preventDefault();
-    const ciphertext = document.getElementById('ciphertext').value;
-    const keyInput = document.getElementById('decode-key').value;
-    let key;
-
-    try {
-        key = JSON.parse(keyInput); // Parse the key from JSON format
-        const decodedText = decode(ciphertext, key);
-        document.getElementById('decoded-result').innerText = decodedText;
-        document.getElementById('decode-results').style.display = 'block'; // Show decode results
-    } catch (error) {
-        alert('Invalid key format. Please enter a valid JSON array for the key.');
-    }
-});
-
-// Copy key to clipboard
-document.getElementById('copy-key').addEventListener('click', function() {
-    const keyText = document.getElementById('key').innerText;
-    navigator.clipboard.writeText(keyText).then(() => {
-        alert('Key copied to clipboard!');
-    }).catch(err => {
-        console.error('Failed to copy: ', err);
-    });
-});
-
-// Copy encoded text to clipboard
-document.getElementById('copy-encoded').addEventListener('click', function() {
-    const encodedText = document.getElementById('encoded').innerText;
-    navigator.clipboard.writeText(encodedText).then(() => {
-        alert('Encoded text copied to clipboard!');
-    }).catch(err => {
-        console.error('Failed to copy: ', err);
-    });
-});
