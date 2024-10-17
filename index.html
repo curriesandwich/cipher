@@ -3,18 +3,25 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cipher Encoder/Decoder</title>
+    <title>Randomized Cipher Algorithm</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div class="container">
-        <h1>Randomized Cipher Encoder/Decoder</h1>
+        <h1>Randomized Cipher Algorithm</h1>
         
-        <form id="cipher-form">
-            <label for="plaintext">Enter Plaintext:</label>
-            <textarea id="plaintext" name="plaintext" required></textarea>
-            <button type="submit">Encode</button>
-        </form>
+        <div class="input-section">
+            <h2>Encrypt Text</h2>
+            <textarea id="plaintext" rows="5" placeholder="Enter plaintext here..."></textarea>
+            <button id="generate">Generate Key & Encode</button>
+        </div>
+
+        <div class="input-section">
+            <h2>Decrypt Text</h2>
+            <textarea id="ciphertext" rows="5" placeholder="Enter ciphertext here..."></textarea>
+            <input type="text" id="keyInput" placeholder="Enter the key here..." />
+            <button id="decode">Decode</button>
+        </div>
 
         <div id="results" class="results">
             <h2>Results:</h2>
@@ -33,26 +40,41 @@
                 <p id="decoded"></p>
             </div>
         </div>
-
-        <hr>
-
-        <form id="decode-form">
-            <label for="ciphertext">Enter Ciphertext:</label>
-            <textarea id="ciphertext" name="ciphertext" required></textarea>
-            <label for="decode-key">Enter Key (JSON Format):</label>
-            <textarea id="decode-key" name="decode-key" required></textarea>
-            <button type="submit">Decode</button>
-        </form>
-
-        <div id="decode-results" class="results">
-            <h2>Decoded Result:</h2>
-            <div class="result-box">
-                <h3>Decoded Text:</h3>
-                <p id="decoded-result"></p>
-            </div>
-        </div>
     </div>
 
     <script src="cipher.js"></script>
+    <script>
+        document.getElementById('generate').onclick = function() {
+            const plaintext = document.getElementById('plaintext').value;
+            const key = generateKey();
+            const encodedText = encode(plaintext, key);
+            
+            document.getElementById('key').innerText = key;
+            document.getElementById('encoded').innerText = encodedText;
+            document.getElementById('decoded').innerText = ''; // Clear previous decoded text
+        };
+
+        document.getElementById('decode').onclick = function() {
+            const ciphertext = document.getElementById('ciphertext').value;
+            const key = document.getElementById('keyInput').value;
+            const decodedText = decode(ciphertext, key);
+            
+            document.getElementById('decoded').innerText = decodedText;
+        };
+
+        document.getElementById('copy-key').onclick = function() {
+            const key = document.getElementById('key').innerText;
+            navigator.clipboard.writeText(key).then(() => {
+                alert('Key copied to clipboard!');
+            });
+        };
+
+        document.getElementById('copy-encoded').onclick = function() {
+            const encodedText = document.getElementById('encoded').innerText;
+            navigator.clipboard.writeText(encodedText).then(() => {
+                alert('Encoded text copied to clipboard!');
+            });
+        };
+    </script>
 </body>
 </html>
