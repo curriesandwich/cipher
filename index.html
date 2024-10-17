@@ -17,9 +17,18 @@
 
         <div id="results" class="results">
             <h2>Results:</h2>
-            <p><strong>Key:</strong> <span id="key"></span></p>
-            <p><strong>Encoded Text:</strong> <span id="encoded"></span></p>
-            <p><strong>Decoded Text:</strong> <span id="decoded"></span></p>
+            <div class="result-box">
+                <h3>Key:</h3>
+                <p id="key"></p>
+            </div>
+            <div class="result-box">
+                <h3>Encoded Text:</h3>
+                <p id="encoded"></p>
+            </div>
+            <div class="result-box">
+                <h3>Decoded Text:</h3>
+                <p id="decoded"></p>
+            </div>
         </div>
     </div>
 
@@ -76,6 +85,7 @@
             document.getElementById('key').innerText = JSON.stringify(key);
             document.getElementById('encoded').innerText = encoded;
             document.getElementById('decoded').innerText = decoded;
+            document.getElementById('results').style.display = 'block'; // Show results
         });
     </script>
 </body>
