@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cipher Encoder/Decoder</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Randomized Cipher Encoder/Decoder</h1>
+        <form id="cipher-form">
+            <label for="plaintext">Enter Plaintext:</label>
+            <textarea id="plaintext" name="plaintext" required></textarea>
+            <button type="submit">Encode</button>
+        </form>
+
+        <div id="results" class="results">
+            <h2>Results:</h2>
+            <p><strong>Key:</strong> <span id="key"></span></p>
+            <p><strong>Encoded Text:</strong> <span id="encoded"></span></p>
+            <p><strong>Decoded Text:</strong> <span id="decoded"></span></p>
+        </div>
+    </div>
+
+    <script>
+        function generateKey(plaintext) {
+            const key = [];
+            for (let i = 0; i < plaintext.length; i += 3) {
+                const group = plaintext.slice(i, i + 7);
+                const groupKey = [];
+                for (let char of group) {
+                    const rotation = Math.floor(Math.random() * (500 - 100 + 1)) + 100;
+                    groupKey.push(rotation);
+                }
+                key.push(groupKey);
+            }
+            return key;
+        }
+
+        function encode(plaintext, key) {
+            let encodedText = '';
+            for (let i = 0; i < key.length; i++) {
+                const groupKey = key[i];
+                const group = plaintext.slice(i * 7, (i + 1) * 7);
+                for (let j = 0; j < group.length; j++) {
+                    const char = group[j];
+                    const encodedChar = String.fromCharCode(char.charCodeAt(0) + groupKey[j]);
+                    encodedText += encodedChar;
+                }
+            }
+            return encodedText;
+        }
+
+        function decode(encodedText, key) {
+            let decodedText = '';
+            for (let i = 0; i < key.length; i++) {
+                const groupKey = key[i];
+                const group = encodedText.slice(i * groupKey.length, (i + 1) * groupKey.length);
+                for (let j = 0; j < group.length; j++) {
+                    const char = group[j];
+                    const decodedChar = String.fromCharCode(char.charCodeAt(0) - groupKey[j]);
+                    decodedText += decodedChar;
+                }
+            }
+            return decodedText;
+        }
+
+        document.getElementById('cipher-form').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const plaintext = document.getElementById('plaintext').value;
+            const key = generateKey(plaintext);
+            const encoded = encode(plaintext, key);
+            const decoded = decode(encoded, key);
+
+            document.getElementById('key').innerText = JSON.stringify(key);
+            document.getElementById('encoded').innerText = encoded;
+            document.getElementById('decoded').innerText = decoded;
+        });
+    </script>
+</body>
+</html>
