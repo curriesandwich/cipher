@@ -54,26 +54,24 @@
     </div>
 
     <script>
-        document.getElementById('cipher-form').addEventListener('submit', function (event) {
-            event.preventDefault();
-            const plaintext = document.getElementById('plaintext').value;
-            const { key, encodedText } = encode(plaintext);
-            
-            // Limit key length to a specific number of characters, e.g., 100
-            const maxKeyLength = 100;
-            const displayKey = key.length > maxKeyLength ? key.slice(0, maxKeyLength) + '...' : key;
+document.getElementById('cipher-form').addEventListener('submit', function (event) {
+    event.preventDefault();
+    const plaintext = document.getElementById('plaintext').value;
+    const { key, encodedText } = encode(plaintext);
+    
+    // Remove the key length limit to display the full key
+    document.getElementById('key').textContent = key; // Display the full key
+    document.getElementById('encoded').textContent = encodedText;
 
-            document.getElementById('key').textContent = displayKey;
-            document.getElementById('encoded').textContent = encodedText;
+    // Enable copying functionality
+    document.getElementById('copy-key').addEventListener('click', () => {
+        navigator.clipboard.writeText(key); // Copy the full key
+    });
+    document.getElementById('copy-encoded').addEventListener('click', () => {
+        navigator.clipboard.writeText(encodedText);
+    });
+});
 
-            // Enable copying functionality
-            document.getElementById('copy-key').addEventListener('click', () => {
-                navigator.clipboard.writeText(displayKey);
-            });
-            document.getElementById('copy-encoded').addEventListener('click', () => {
-                navigator.clipboard.writeText(encodedText);
-            });
-        });
 
         // Function to encode plaintext
         function encode(plaintext) {
