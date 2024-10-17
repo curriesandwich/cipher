@@ -45,7 +45,13 @@
     <script src="cipher.js"></script>
     <script>
         document.getElementById('generate').onclick = function() {
-            const plaintext = document.getElementById('plaintext').value;
+            const plaintext = document.getElementById('plaintext').value.trim();
+            
+            if (!plaintext) {
+                alert('Please enter some text to encode.');
+                return; // Exit if the input is empty
+            }
+
             const key = generateKey();
             const encodedText = encode(plaintext, key);
             
