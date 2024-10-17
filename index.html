@@ -1,71 +1,127 @@
-document.getElementById('cipher-form').addEventListener('submit', function (event) {
-    event.preventDefault();
-    const plaintext = document.getElementById('plaintext').value;
-    const { key, encodedText } = encode(plaintext);
-    
-    // Limit key length to a specific number of characters, e.g., 100
-    const maxKeyLength = 100;
-    const displayKey = key.length > maxKeyLength ? key.slice(0, maxKeyLength) + '...' : key;
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cipher Encoder/Decoder</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Randomized Cipher Encoder/Decoder</h1>
+        
+        <form id="cipher-form">
+            <label for="plaintext">Enter Plaintext:</label>
+            <textarea id="plaintext" name="plaintext" required></textarea>
+            <button type="submit">Encode</button>
+        </form>
 
-    document.getElementById('key').textContent = displayKey;
-    document.getElementById('encoded').textContent = encodedText;
+        <div id="results" class="results">
+            <h2>Results:</h2>
+            <div class="result-box">
+                <h3>Key:</h3>
+                <p id="key"></p>
+                <button id="copy-key">Copy Key</button>
+            </div>
+            <div class="result-box">
+                <h3>Encoded Text:</h3>
+                <p id="encoded"></p>
+                <button id="copy-encoded">Copy Encoded Text</button>
+            </div>
+            <div class="result-box">
+                <h3>Decoded Text:</h3>
+                <p id="decoded"></p>
+            </div>
+        </div>
 
-    // Enable copying functionality
-    document.getElementById('copy-key').addEventListener('click', () => {
-        navigator.clipboard.writeText(displayKey);
-    });
-    document.getElementById('copy-encoded').addEventListener('click', () => {
-        navigator.clipboard.writeText(encodedText);
-    });
-});
+        <hr>
 
-// Function to encode plaintext
-function encode(plaintext) {
-    const key = generateKey(plaintext);  // Generate the key
-    const encodedText = someEncodingFunction(plaintext, key); // Encode the plaintext using the key
+        <form id="decode-form">
+            <label for="ciphertext">Enter Ciphertext:</label>
+            <textarea id="ciphertext" name="ciphertext" required></textarea>
+            <label for="decode-key">Enter Key (JSON Format):</label>
+            <textarea id="decode-key" name="decode-key" required></textarea>
+            <button type="submit">Decode</button>
+        </form>
 
-    return { key, encodedText };
-}
+        <div id="decode-results" class="results">
+            <h2>Decoded Result:</h2>
+            <div class="result-box">
+                <h3>Decoded Text:</h3>
+                <p id="decoded-result"></p>
+            </div>
+        </div>
+    </div>
 
-// Example function to generate a random key based on the plaintext
-function generateKey(plaintext) {
-    // Example key generation logic (you can modify this according to your cipher logic)
-    let key = '';
-    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-    for (let i = 0; i < plaintext.length; i++) {
-        key += characters.charAt(Math.floor(Math.random() * characters.length));
-    }
-    return key;
-}
+    <script>
+        document.getElementById('cipher-form').addEventListener('submit', function (event) {
+            event.preventDefault();
+            const plaintext = document.getElementById('plaintext').value;
+            const { key, encodedText } = encode(plaintext);
+            
+            // Limit key length to a specific number of characters, e.g., 100
+            const maxKeyLength = 100;
+            const displayKey = key.length > maxKeyLength ? key.slice(0, maxKeyLength) + '...' : key;
 
-// Placeholder for your encoding function
-function someEncodingFunction(plaintext, key) {
-    // Example encoding logic (you should implement your actual cipher logic here)
-    let encoded = '';
-    for (let i = 0; i < plaintext.length; i++) {
-        encoded += String.fromCharCode(plaintext.charCodeAt(i) + key.charCodeAt(i % key.length));
-    }
-    return encoded;
-}
+            document.getElementById('key').textContent = displayKey;
+            document.getElementById('encoded').textContent = encodedText;
 
-// Decode functionality
-document.getElementById('decode-form').addEventListener('submit', function (event) {
-    event.preventDefault();
-    const ciphertext = document.getElementById('ciphertext').value;
-    const decodeKey = document.getElementById('decode-key').value;
+            // Enable copying functionality
+            document.getElementById('copy-key').addEventListener('click', () => {
+                navigator.clipboard.writeText(displayKey);
+            });
+            document.getElementById('copy-encoded').addEventListener('click', () => {
+                navigator.clipboard.writeText(encodedText);
+            });
+        });
 
-    const decodedText = decode(ciphertext, decodeKey);
-    document.getElementById('decoded-result').textContent = decodedText;
-});
+        // Function to encode plaintext
+        function encode(plaintext) {
+            const key = generateKey(plaintext);  // Generate the key
+            const encodedText = someEncodingFunction(plaintext, key); // Encode the plaintext using the key
 
-// Function to decode ciphertext
-function decode(ciphertext, key) {
-    // Example decoding logic (implement your actual cipher logic here)
-    let decoded = '';
-    const parsedKey = JSON.parse(key); // Parse the JSON key if necessary
+            return { key, encodedText };
+        }
 
-    for (let i = 0; i < ciphertext.length; i++) {
-        decoded += String.fromCharCode(ciphertext.charCodeAt(i) - parsedKey.charCodeAt(i % parsedKey.length));
-    }
-    return decoded;
-}
+        // Example function to generate a random key based on the plaintext
+        function generateKey(plaintext) {
+            let key = '';
+            const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+            for (let i = 0; i < plaintext.length; i++) {
+                key += characters.charAt(Math.floor(Math.random() * characters.length));
+            }
+            return key;
+        }
+
+        // Placeholder for your encoding function
+        function someEncodingFunction(plaintext, key) {
+            let encoded = '';
+            for (let i = 0; i < plaintext.length; i++) {
+                encoded += String.fromCharCode(plaintext.charCodeAt(i) + key.charCodeAt(i % key.length));
+            }
+            return encoded;
+        }
+
+        // Decode functionality
+        document.getElementById('decode-form').addEventListener('submit', function (event) {
+            event.preventDefault();
+            const ciphertext = document.getElementById('ciphertext').value;
+            const decodeKey = document.getElementById('decode-key').value;
+
+            const decodedText = decode(ciphertext, decodeKey);
+            document.getElementById('decoded-result').textContent = decodedText;
+        });
+
+        // Function to decode ciphertext
+        function decode(ciphertext, key) {
+            let decoded = '';
+            // Assume the key is a string; if JSON parsing is needed, uncomment the next line
+            // const parsedKey = JSON.parse(key); 
+            for (let i = 0; i < ciphertext.length; i++) {
+                decoded += String.fromCharCode(ciphertext.charCodeAt(i) - key.charCodeAt(i % key.length));
+            }
+            return decoded;
+        }
+    </script>
+</body>
+</html>
