@@ -17,17 +17,18 @@ document.getElementById('cipher-form').addEventListener('submit', function (even
 
 // Function to encode plaintext
 function encode(plaintext) {
-    const key = generateKey(plaintext);  // Generate the key
+    const keyLength = 16; // Set your desired fixed key length
+    const key = generateKey(keyLength);  // Generate the key with a fixed length
     const encodedText = chaoticEncoding(plaintext, key); // Encode the plaintext using the key
 
     return { key, encodedText };
 }
 
-// Example function to generate a random key based on the plaintext
-function generateKey(plaintext) {
+// Example function to generate a random key with a fixed length
+function generateKey(length) {
     let key = '';
     const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-    for (let i = 0; i < plaintext.length; i++) {
+    for (let i = 0; i < length; i++) {
         key += characters.charAt(Math.floor(Math.random() * characters.length));
     }
     return key;
