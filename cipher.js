@@ -3,7 +3,7 @@ let currentKey = '';
 
 // Function to encode plaintext
 function encode(plaintext) {
-    currentKey = generateKey(plaintext); // Generate a key matching plaintext length
+    currentKey = generateKey(plaintext.length); // Generate a key matching the length of the plaintext
     const encodedText = chaoticEncoding(plaintext, currentKey); // Encode the plaintext using the key
 
     return { key: currentKey, encodedText };
@@ -22,14 +22,14 @@ function decode(ciphertext, key) {
     return decoded;
 }
 
-// Example function to generate a key based on the plaintext length
-function generateKey(plaintext) {
+// Example function to generate a key based on the length of the plaintext
+function generateKey(length) {
     let key = '';
     const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-    for (let i = 0; i < plaintext.length; i++) {
+    for (let i = 0; i < length; i++) { // Use the length parameter to generate a key of the correct length
         key += characters.charAt(Math.floor(Math.random() * characters.length));
     }
-    return key; // Key length matches plaintext length
+    return key; // Key length matches the specified length
 }
 
 // Chaotic encoding function
