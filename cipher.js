@@ -1,55 +1,9 @@
-// Example function to generate a random key based on the plaintext
-function generateKey(plaintext) {
-    let key = '';
-    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()';
-    for (let i = 0; i < plaintext.length; i++) {
-        key += characters.charAt(Math.floor(Math.random() * characters.length));
-    }
-    return key;
-}
-
-// Function to encode plaintext with complex mathematical operations and XOR
-function complexEncodingFunction(plaintext, key) {
-    let encoded = '';
-    for (let i = 0; i < plaintext.length; i++) {
-        let ptCharCode = plaintext.charCodeAt(i);
-        let keyCharCode = key.charCodeAt(i % key.length);
-        
-        // Mathematical operation (addition)
-        let mathEncodedCharCode = (ptCharCode + (keyCharCode * 3)) % 256;
-
-        // XOR operation
-        let finalEncodedCharCode = mathEncodedCharCode ^ keyCharCode;
-
-        encoded += String.fromCharCode(finalEncodedCharCode);
-    }
-    return encoded;
-}
-
-// Function to decode ciphertext using the reverse of the encoding process
-function decode(ciphertext, key) {
-    let decoded = '';
-    for (let i = 0; i < ciphertext.length; i++) {
-        let cipherCharCode = ciphertext.charCodeAt(i);
-        let keyCharCode = key.charCodeAt(i % key.length);
-
-        // Reverse the XOR operation
-        let mathEncodedCharCode = cipherCharCode ^ keyCharCode;
-
-        // Reverse the mathematical operation (subtraction)
-        let decodedCharCode = (mathEncodedCharCode - (keyCharCode * 3) + 256) % 256;
-
-        decoded += String.fromCharCode(decodedCharCode);
-    }
-    return decoded;
-}
-
-// Event listener for encoding the plaintext
 document.getElementById('cipher-form').addEventListener('submit', function (event) {
     event.preventDefault();
     const plaintext = document.getElementById('plaintext').value;
     const { key, encodedText } = encode(plaintext);
     
+    // Remove the key length limit to display the full key
     document.getElementById('key').textContent = key; // Display the full key
     document.getElementById('encoded').textContent = encodedText;
 
@@ -62,12 +16,31 @@ document.getElementById('cipher-form').addEventListener('submit', function (even
     });
 });
 
-// Encoding function
+// Function to encode plaintext
 function encode(plaintext) {
     const key = generateKey(plaintext);  // Generate the key
-    const encodedText = complexEncodingFunction(plaintext, key); // Encode the plaintext using the key
+    const encodedText = someEncodingFunction(plaintext, key); // Encode the plaintext using the key
 
     return { key, encodedText };
+}
+
+// Example function to generate a random key based on the plaintext
+function generateKey(plaintext) {
+    let key = '';
+    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    for (let i = 0; i < plaintext.length; i++) {
+        key += characters.charAt(Math.floor(Math.random() * characters.length));
+    }
+    return key;
+}
+
+// Placeholder for your encoding function
+function someEncodingFunction(plaintext, key) {
+    let encoded = '';
+    for (let i = 0; i < plaintext.length; i++) {
+        encoded += String.fromCharCode(plaintext.charCodeAt(i) + key.charCodeAt(i % key.length));
+    }
+    return encoded;
 }
 
 // Decode functionality
@@ -79,3 +52,14 @@ document.getElementById('decode-form').addEventListener('submit', function (even
     const decodedText = decode(ciphertext, decodeKey);
     document.getElementById('decoded-result').textContent = decodedText;
 });
+
+// Function to decode ciphertext
+function decode(ciphertext, key) {
+    let decoded = '';
+    // Assume the key is a string; if JSON parsing is needed, uncomment the next line
+    // const parsedKey = JSON.parse(key); 
+    for (let i = 0; i < ciphertext.length; i++) {
+        decoded += String.fromCharCode(ciphertext.charCodeAt(i) - key.charCodeAt(i % key.length));
+    }
+    return decoded;
+}
