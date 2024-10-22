@@ -27,7 +27,7 @@ function encode(plaintext) {
 // Example function to generate a random key based on the plaintext
 function generateKey(plaintext) {
     let key = '';
-    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()';
     for (let i = 0; i < plaintext.length; i++) {
         key += characters.charAt(Math.floor(Math.random() * characters.length));
     }
