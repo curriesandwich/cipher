@@ -1,3 +1,4 @@
+// Event listener for encoding the plaintext
 document.getElementById('cipher-form').addEventListener('submit', function (event) {
     event.preventDefault();
     const plaintext = document.getElementById('plaintext').value;
@@ -16,10 +17,10 @@ document.getElementById('cipher-form').addEventListener('submit', function (even
     });
 });
 
-// Function to encode plaintext
+// Function to encode plaintext using the complex encoding method
 function encode(plaintext) {
     const key = generateKey(plaintext);  // Generate the key
-    const encodedText = someEncodingFunction(plaintext, key); // Encode the plaintext using the key
+    const encodedText = complexEncodingFunction(plaintext, key); // Encode the plaintext using the key
 
     return { key, encodedText };
 }
@@ -34,16 +35,35 @@ function generateKey(plaintext) {
     return key;
 }
 
-// Placeholder for your encoding function
-function someEncodingFunction(plaintext, key) {
+// Complex encoding function using advanced mathematical operations
+function complexEncodingFunction(plaintext, key) {
     let encoded = '';
     for (let i = 0; i < plaintext.length; i++) {
-        encoded += String.fromCharCode(plaintext.charCodeAt(i) + key.charCodeAt(i % key.length));
+        // Fetch the char code of both the plaintext and key
+        let ptCharCode = plaintext.charCodeAt(i);
+        let keyCharCode = key.charCodeAt(i % key.length);
+
+        // Complex mathematical operation to mix the characters
+        let encodedCharCode = (
+            ((ptCharCode ^ keyCharCode) + (ptCharCode * keyCharCode)) % 256 // XOR and multiply, modulus to keep values in range
+        ) + 
+        (
+            Math.abs(Math.sin(ptCharCode + keyCharCode) * 1000) % 256  // Sin function for non-linearity, modulus 256
+        ) + 
+        (
+            ((ptCharCode << 3) + (keyCharCode >> 2)) % 256  // Shift bits to add more complexity
+        );
+
+        // Ensure the encoded value stays within the range of valid character codes (0-255)
+        encodedCharCode = Math.floor(encodedCharCode) % 256;
+
+        // Convert back to a character and add to the encoded string
+        encoded += String.fromCharCode(encodedCharCode);
     }
     return encoded;
 }
 
-// Decode functionality
+// Event listener for decoding the ciphertext
 document.getElementById('decode-form').addEventListener('submit', function (event) {
     event.preventDefault();
     const ciphertext = document.getElementById('ciphertext').value;
@@ -53,13 +73,24 @@ document.getElementById('decode-form').addEventListener('submit', function (even
     document.getElementById('decoded-result').textContent = decodedText;
 });
 
-// Function to decode ciphertext
+// Function to decode ciphertext using a reverse approach
 function decode(ciphertext, key) {
     let decoded = '';
-    // Assume the key is a string; if JSON parsing is needed, uncomment the next line
-    // const parsedKey = JSON.parse(key); 
     for (let i = 0; i < ciphertext.length; i++) {
-        decoded += String.fromCharCode(ciphertext.charCodeAt(i) - key.charCodeAt(i % key.length));
+        let cipherCharCode = ciphertext.charCodeAt(i);
+        let keyCharCode = key.charCodeAt(i % key.length);
+
+        // Reverse the complex encoding function by undoing the operations
+        let decodedCharCode = (
+            ((cipherCharCode - Math.abs(Math.sin(cipherCharCode + keyCharCode) * 1000) % 256) % 256)  // Reverse non-linearity
+            - ((cipherCharCode ^ keyCharCode) + (cipherCharCode * keyCharCode)) % 256  // Reverse XOR and multiply
+        ) % 256;
+
+        // Handle negative values and ensure char code is valid
+        decodedCharCode = ((decodedCharCode + 256) % 256);
+
+        // Convert back to character
+        decoded += String.fromCharCode(decodedCharCode);
     }
     return decoded;
 }
