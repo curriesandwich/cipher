@@ -3,33 +3,33 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cipher Encoder/Decoder</title>
+    <title>Encryption</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div class="container">
-        <h1>Randomized Cipher Encoder/Decoder</h1>
+        <h1>Encryption/Décryption aléatoire</h1>
         
         <form id="cipher-form">
-            <label for="plaintext">Enter Plaintext:</label>
+            <label for="plaintext">Inserer le texte  en claire:</label>
             <textarea id="plaintext" name="plaintext" required></textarea>
             <button type="submit">Encode</button>
         </form>
 
         <div id="results" class="results">
-            <h2>Results:</h2>
+            <h2>Resultats:</h2>
             <div class="result-box">
-                <h3>Key:</h3>
+                <h3>Clé:</h3>
                 <p id="key"></p>
-                <button id="copy-key">Copy Key</button>
+                <button id="copy-key">Copie le clé</button>
             </div>
             <div class="result-box">
-                <h3>Encoded Text:</h3>
+                <h3>Texte crypté:</h3>
                 <p id="encoded"></p>
-                <button id="copy-encoded">Copy Encoded Text</button>
+                <button id="copy-encoded">Copie le texte crypté</button>
             </div>
             <div class="result-box">
-                <h3>Decoded Text:</h3>
+                <h3>Texte décrypter:</h3>
                 <p id="decoded"></p>
             </div>
         </div>
@@ -37,17 +37,17 @@
         <hr>
 
         <form id="decode-form">
-            <label for="ciphertext">Enter Ciphertext:</label>
+            <label for="ciphertext">Inserer le texte crypté:</label>
             <textarea id="ciphertext" name="ciphertext" required></textarea>
-            <label for="decode-key">Enter Key (JSON Format):</label>
+            <label for="decode-key">Inserer le clé:</label>
             <textarea id="decode-key" name="decode-key" required></textarea>
-            <button type="submit">Decode</button>
+            <button type="submit">Décrypter</button>
         </form>
 
         <div id="decode-results" class="results">
-            <h2>Decoded Result:</h2>
+            <h2>Résultat décrypter:</h2>
             <div class="result-box">
-                <h3>Decoded Text:</h3>
+                <h3>Texte décrypter:</h3>
                 <p id="decoded-result"></p>
             </div>
         </div>
